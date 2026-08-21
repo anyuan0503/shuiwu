@@ -1,0 +1,1 @@
+import{_ as t,a,c as n,b as o,K as r}from"./index-DpvJOxff.js";const c={},l={class:"panel-title"};function d(s,e){return a(),n("div",l,[e[0]||(e[0]=o("span",{class:"pt-deco"},null,-1)),r(s.$slots,"default",{},void 0,!0)])}const i=t(c,[["render",d],["__scopeId","data-v-59750973"]]);export{i as P};
