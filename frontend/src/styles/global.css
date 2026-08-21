@@ -1,0 +1,196 @@
+/* ============================================================
+   水务监测分析系统 · 全球主题
+   仿"黑客帝国 / 未来科技"深色主题
+   ============================================================ */
+:root {
+  --bg-page: #0a0e27;
+  --bg-deep: #060a1a;
+  --bg-panel: rgba(18, 25, 55, 0.78);
+  --bg-panel-solid: #111a38;
+  --bg-hover: rgba(0, 229, 255, 0.08);
+
+  /* 主题高亮色 */
+  --primary: #00e5ff;
+  --green: #00ffa3;
+  --gold: #ffd75e;
+  --danger: #ff4d6d;
+  --warning: #ff9f43;
+  --purple: #8b7bff;
+
+  --text-main: #dceaff;
+  --text-sub: #8fa8cf;
+  --text-dim: #5a6f96;
+
+  --border-color: rgba(0, 229, 255, 0.22);
+  --border-glow: rgba(0, 229, 255, 0.5);
+
+  --shadow-glow: 0 0 18px rgba(0, 229, 255, 0.15);
+  --glow-primary: 0 0 22px rgba(0, 229, 255, 0.35);
+
+  --radius: 10px;
+
+  /* 等宽数码字体栈 */
+  --font-num: 'DIN Alternate', 'Bahnschrift', 'Segoe UI', 'Roboto Mono',
+    'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+  --font-zh: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-zh);
+  color: var(--text-main);
+  background: radial-gradient(ellipse at 20% -10%, #0e1a45 0%, 
+      #0a0e27 45%, #05070f 100%);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* 细滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.5), rgba(255, 215, 94, 0.4));
+  border-radius: 3px;
+}
+
+.num {
+  font-family: var(--font-num);
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Element Plus 深色覆盖 */
+.el-button--primary {
+  --el-button-bg-color: var(--primary);
+  --el-button-border-color: var(--primary);
+  --el-button-text-color: #02131f;
+  --el-button-hover-bg-color: #4deeff;
+  --el-button-hover-border-color: #4deeff;
+  --el-button-active-bg-color: #00c8e0;
+}
+
+.el-input__wrapper,
+.el-textarea__inner,
+.el-select__wrapper {
+  background-color: var(--bg-panel) !important;
+  box-shadow: 0 0 0 1px var(--border-color) inset !important;
+}
+.el-input__inner,
+.el-textarea__inner {
+  color: var(--text-main) !important;
+}
+
+.el-table {
+  --el-table-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
+  --el-table-header-bg-color: rgba(0, 229, 255, 0.08);
+  --el-table-header-text-color: var(--primary);
+  --el-table-text-color: var(--text-main);
+  --el-table-border-color: rgba(0, 229, 255, 0.12);
+  --el-table-row-hover-bg-color: rgba(0, 229, 255, 0.06);
+  background: transparent;
+}
+
+.el-table th.el-table__cell {
+  font-weight: 600;
+}
+.el-table tr,
+.el-table td.el-table__cell {
+  background: transparent;
+}
+
+.el-dialog,
+.el-drawer {
+  --el-dialog-bg-color: var(--bg-panel-solid);
+  --el-drawer-bg-color: var(--bg-panel-solid);
+  --el-bg-color: var(--bg-panel-solid);
+  --el-fill-color-blank: var(--bg-panel-solid);
+}
+.el-dialog {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+.el-dialog__title {
+  color: var(--primary);
+}
+
+.el-form-item__label {
+  color: var(--text-sub);
+}
+
+.el-select-dropdown,
+.el-popper {
+  --el-bg-color-overlay: #0f1733;
+  --el-border-color-light: var(--border-color);
+  --el-text-color-primary: var(--text-main);
+  --el-text-color-regular: var(--text-main);
+}
+
+.el-pagination {
+  --el-pagination-bg-color: transparent;
+  --el-pagination-button-bg-color: transparent;
+  --el-pagination-text-color: var(--text-sub);
+  --el-pagination-hover-color: var(--primary);
+}
+
+.el-tag {
+  font-weight: 600;
+}
+
+.page-container {
+  padding: 16px;
+}
+.page-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-glow);
+}
+
+/* 玻璃拟态工具类 */
+.glass {
+  background: linear-gradient(160deg, rgba(18, 25, 55, 0.85), rgba(10, 14, 39, 0.75));
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-color);
+}
+
+/* 通用扫描线动画背景 */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+/* 呼吸发光 */
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 229, 255, 0.2); }
+  50% { box-shadow: 0 0 24px rgba(0, 229, 255, 0.45); }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

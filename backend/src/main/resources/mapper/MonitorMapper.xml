@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.water.mapper.MonitorMapper">
+
+    <insert id="insert" parameterType="map">
+        INSERT INTO ${tableName}
+        (device_id, data_time, pressure, flow, ph, turbidity, residual_cl, temperature, level, is_clean, create_time)
+        VALUES
+        (#{rec.deviceId}, #{rec.dataTime}, #{rec.pressure}, #{rec.flow}, #{rec.ph},
+         #{rec.turbidity}, #{rec.residualCl}, #{rec.temperature}, #{rec.level},
+         COALESCE(#{rec.isClean}, 1), COALESCE(#{rec.createTime}, NOW()))
+    </insert>
+
+    <select id="existsTable" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM information_schema.tables
+        WHERE table_schema = DATABASE() AND table_name = #{tableName}
+    </select>
+
+    <select id="selectTrend" resultType="java.util.Map" parameterType="map">
+        SELECT data_time AS time, ${field} AS value
+        FROM ${tableName}
+        WHERE device_id = #{deviceId}
+          AND data_time &gt;= #{start}
+          AND data_time &lt;= #{end}
+        ORDER BY data_time ASC
+    </select>
+
+    <select id="selectRows" resultType="java.util.Map" parameterType="map">
+        SELECT data_time, pressure, flow, ph, turbidity, residual_cl, temperature, level
+        FROM ${tableName}
+        WHERE device_id = #{deviceId}
+          AND data_time &gt;= #{start}
+          AND data_time &lt;= #{end}
+        ORDER BY data_time ASC
+    </select>
+
+</mapper>
