@@ -1,0 +1,117 @@
+# =====================================================================
+# 水务监测分析系统 - Docker 编排文件 (Linux 服务器部署)
+#
+#  启动：  cd shuiwu/deploy && docker compose up -d --build
+#  停止：  docker compose down                 (保留数据卷)
+#  彻底清理：  docker compose down -v          (删除数据卷, 谨慎)
+#  查看日志：  docker compose logs -f backend
+#
+# 提供服务：mysql(5.7) / redis(7) / ai-service / backend / frontend(nginx)
+# 访问入口：http://<服务器IP>/    默认账号 admin/123456
+# =====================================================================
+name: shuiwu
+
+services:
+
+  # ---------- 数据库 MySQL 5.7 ----------
+  mysql:
+    image: mysql:5.7
+    container_name: shuiwu-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shuiwu
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_general_ci
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # SQL 初始化脚本：容器首次启动数据目录为空时自动执行
+      - ../sql/shuiwu.sql:/docker-entrypoint-initdb.d/shuiwu.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "3306:3306"
+
+  # ---------- 缓存 Redis ----------
+  redis:
+    image: redis:7-alpine
+    container_name: shuiwu-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    ports:
+      - "6379:6379"
+
+  # ---------- AI 微服务 (FastAPI) ----------
+  ai-service:
+    build:
+      context: ../ai-service
+      dockerfile: Dockerfile
+    image: shuiwu/ai-service:1.0.0
+    container_name: shuiwu-ai
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - "8000:8000"
+
+  # ---------- 后端 (Spring Boot) ----------
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    image: shuiwu/backend:1.0.0
+    container_name: shuiwu-backend
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+      # 通过环境变量覆盖默认配置，指向 Docker 网络内的服务
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/shuiwu?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: "6379"
+      WATER_AI_BASE_URL: http://ai-service:8000
+    volumes:
+      - reports-data:/app/reports
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    ports:
+      - "8080:8080"
+
+  # ---------- 前端 (Nginx) ----------
+  frontend:
+    build:
+      context: ..          # 上下文为项目根目录，便于 COPY nginx 配置
+      dockerfile: frontend/Dockerfile
+    image: shuiwu/frontend:1.0.0
+    container_name: shuiwu-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+# ---------- 数据卷(持久化) ----------
+volumes:
+  mysql-data:
+  redis-data:
+  reports-data:
