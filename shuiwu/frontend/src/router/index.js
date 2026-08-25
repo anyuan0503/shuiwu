@@ -46,49 +46,43 @@ let addedRoutes = []
 
 function registerDynamicRoutes(menus) {
   addedRoutes.forEach((r) => {
-    if (router.hasRoute(r.name)) router.removeRoute(r.name)
+    if (r.name && router.hasRoute(r.name)) router.removeRoute(r.name)
   })
   addedRoutes = []
 
-  const parentRoutes = []
-  const children = []
+  const leaves = []
 
-  const walk = (menuList) => {
+  // 递归收集所有"有页面组件"的叶子：
+  // - 顶层页面（无 children 但有 component，如 /dashboard）
+  // - 目录下子页面（如 /system/user）
+  const walk = (menuList, parentPath) => {
     menuList.forEach((m) => {
-      const folderPath = m.path
-      // 目录：创建父路由
-      const parent = {
-        path: folderPath.startsWith('/') ? folderPath : `/${folderPath}`,
-        component: () => import('@/layout/MainLayout.vue'),
-        children: []
-      }
-      parentRoutes.push(parent)
-      const sub = m.children || []
-      sub.forEach((ch) => {
-        const view = componentMap[ch.component]
-        if (!view) return
-        children.push({
-          path: ch.path,
-          name: ch.path ? ch.path.replace(/^\//, '') : undefined,
+      const view = componentMap[m.component]
+      const kids = m.children || []
+      if (view) {
+        leaves.push({
+          path: m.path,
+          name: m.path ? m.path.replace(/^\//, '') : undefined,
           component: view,
           meta: {
-            title: ch.name,
-            icon: ch.icon,
-            menuId: ch.id,
-            parent: folderPath
+            title: m.name,
+            icon: m.icon,
+            menuId: m.id,
+            parent: parentPath || ''
           }
         })
-      })
+      }
+      if (kids.length) walk(kids, m.path)
     })
   }
-  walk(menus)
+  walk(menus, '')
 
   // 一块 MainLayout 下挂所有叶子，便于统一布局
   addedRoutes.push({
     path: '/',
     name: 'MainLayout',
     component: () => import('@/layout/MainLayout.vue'),
-    children: children.length ? children : [],
+    children: leaves,
     meta: { hidden: true }
   })
 
