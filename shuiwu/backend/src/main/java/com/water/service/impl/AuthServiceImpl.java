@@ -84,7 +84,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserInfoVO me() {
         LoginUser loginUser = SecurityUtil.getLoginUser();
-        return buildUserInfo(loginUser.getUser(), loginUser.getRoles());
+        UserInfoVO info = buildUserInfo(loginUser.getUser(), loginUser.getRoles());
+        // 刷新页面后前端依赖该接口恢复动态路由菜单
+        info.setMenus(buildMenus(loginUser.getUser().getId(), loginUser.getRoles()));
+        return info;
     }
 
     @Override

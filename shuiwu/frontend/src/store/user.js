@@ -27,6 +27,8 @@ export const useUserStore = defineStore('user', {
       try {
         const res = await getMe()
         this.user = res.data || null
+        // 刷新页面后恢复动态路由菜单
+        this.menus = (res.data && res.data.menus) || []
       } catch (e) {
         /* ignore */
       }
