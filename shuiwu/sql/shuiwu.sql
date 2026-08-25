@@ -9,6 +9,8 @@
 DROP DATABASE IF EXISTS shuiwu;
 CREATE DATABASE shuiwu DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE shuiwu;
+-- 令 mysql 客户端按 UTF-8 解释初始化脚本，避免中文以 latin1 误存为乱码
+SET NAMES utf8mb4;
 
 -- ---------------------------
 -- 1. 用户表
