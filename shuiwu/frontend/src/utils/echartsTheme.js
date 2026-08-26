@@ -1,6 +1,5 @@
 // ECharts 统一科技暗色主题工具
-import * as echarts from 'echarts'
-
+// 注意：echarts 实例与主题注册统一在 ./echarts.js 中按需配置，此处仅导出常量与通用配置
 const PRIMARY = '#00e5ff'
 const GREEN = '#00ffa3'
 const GOLD = '#ffd75e'
@@ -30,25 +29,7 @@ export const axisCommon = () => ({
 })
 
 export function registerTheme() {
-  try {
-    echarts.registerTheme('tech', {
-      color: [PRIMARY, GREEN, GOLD, PURPLE, DANGER, '#4deeff', '#ffb3d9'],
-      backgroundColor: 'transparent',
-      textStyle: { color: SUB, fontSize: 12 },
-      title: { textStyle: { color: '#dceaff' } },
-      legend: {
-        textStyle: { color: SUB },
-        pageTextStyle: { color: SUB },
-        pageIconColor: PRIMARY,
-        pageIconInactiveColor: '#3a4a7a',
-        itemWidth: 12,
-        itemHeight: 8
-      },
-      grid: { show: false }
-    })
-  } catch (e) {
-    /* ignore */
-  }
+  // 主题已在 ./echarts.js 中统一注册，保留空实现兼容旧调用
 }
 
 export { PRIMARY, GREEN, GOLD, PURPLE, DANGER, SUB }

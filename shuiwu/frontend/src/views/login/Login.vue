@@ -38,7 +38,7 @@
             />
           </el-form-item>
           <div class="row">
-            <el-checkbox v-model="remember">记住我</el-checkbox>
+            <el-checkbox v-model="form.remember">记住我</el-checkbox>
           </div>
           <el-button
             type="primary"
@@ -63,7 +63,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/store/user'
 

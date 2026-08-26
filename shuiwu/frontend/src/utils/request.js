@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { ElMessage, ElLoading } from 'element-plus'
 import router from '@/router'
 
 // 统一 axios 实例

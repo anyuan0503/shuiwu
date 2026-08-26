@@ -115,7 +115,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/store/user'
 import { updatePassword } from '@/api/auth'
 import TimeBox from '@/components/TimeBox.vue'

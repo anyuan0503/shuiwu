@@ -52,7 +52,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
 import ChartCard from '@/components/ChartCard.vue'
 import { listRoles, menuTree } from '@/api/system'
 
