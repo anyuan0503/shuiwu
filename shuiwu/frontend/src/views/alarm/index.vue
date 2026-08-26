@@ -103,7 +103,6 @@
 
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search, Setting } from '@element-plus/icons-vue'
 import ChartCard from '@/components/ChartCard.vue'
 import BaseChart from '@/components/BaseChart.vue'

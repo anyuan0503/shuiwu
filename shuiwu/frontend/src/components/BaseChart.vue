@@ -4,10 +4,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
-import * as echarts from 'echarts'
-import { registerTheme } from '@/utils/echartsTheme'
-
-registerTheme()
+import echarts from '@/utils/echarts'
 
 const props = defineProps({
   option: { type: Object, default: () => ({}) },

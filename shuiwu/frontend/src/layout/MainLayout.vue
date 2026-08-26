@@ -115,9 +115,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/store/user'
 import { updatePassword } from '@/api/auth'
+import { resolveMenuPath } from '@/utils/path'
 import TimeBox from '@/components/TimeBox.vue'
 
 const route = useRoute()
@@ -164,11 +164,9 @@ function iconOf(name) {
   return map[name] || 'Menu'
 }
 
+// resolvePath 统一使用 @/utils/path 的 resolveMenuPath，与路由注册保持一致
 function resolvePath(parent, child) {
-  if (child.startsWith('http')) return child
-  if (child.startsWith('/')) return child
-  const full = `${parent}/${child}`.replace(/\/+/g, '/')
-  return full.startsWith('/') ? full : `/${full}`
+  return resolveMenuPath(parent, child)
 }
 
 const activeMenu = computed(() => route.path)

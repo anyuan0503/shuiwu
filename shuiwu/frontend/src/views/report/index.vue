@@ -84,7 +84,6 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
 import { Cpu, Download } from '@element-plus/icons-vue'
 import dayjs from 'dayjs'
 import ChartCard from '@/components/ChartCard.vue'

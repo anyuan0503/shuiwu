@@ -1,0 +1,2 @@
+import{s as a}from"./index-DhM1wRiE.js";function t(r){return a.get("/alarm/page",{params:r})}function l(){return a.get("/alarm/rule/list")}function n(r){return a.post("/alarm/rule",r)}function u(r){return a.put("/alarm/rule",r)}function m(r){return a.delete(`/alarm/rule/${r}`)}function s(r){return a.put("/alarm/handle",r)}function i(r){return a.put("/alarm/ignore",r)}function o(){return a.get("/alarm/summary")}function c(r){return a.get("/alarm/trend",{params:r})}export{o as a,c as b,n as c,m as d,s as h,i,l,t as p,u};
+//# sourceMappingURL=alarm-CC3hy4dH.js.map

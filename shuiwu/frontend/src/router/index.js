@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/store/user'
+import { resolveMenuPath } from '@/utils/path'
 
 // 后端菜单 component 字符串 -> 前端组件 的映射
 const componentMap = {
@@ -55,14 +56,17 @@ function registerDynamicRoutes(menus) {
   // 递归收集所有"有页面组件"的叶子：
   // - 顶层页面（无 children 但有 component，如 /dashboard）
   // - 目录下子页面（如 /system/user）
+  // 关键：注册 path 必须与菜单点击跳转使用同一 resolveMenuPath 规则，
+  // 否则后端返回相对路径（如 'analyze'）时，注册的路由与点击 URL 不一致导致 404
   const walk = (menuList, parentPath) => {
     menuList.forEach((m) => {
       const view = componentMap[m.component]
       const kids = m.children || []
       if (view) {
+        const path = resolveMenuPath(parentPath, m.path)
         leaves.push({
-          path: m.path,
-          name: m.path ? m.path.replace(/^\//, '') : undefined,
+          path,
+          name: path ? path.replace(/^\//, '') : undefined,
           component: view,
           meta: {
             title: m.name,

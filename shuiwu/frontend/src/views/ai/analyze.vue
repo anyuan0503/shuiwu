@@ -90,7 +90,6 @@
 
 <script setup>
 import { ref, computed, onBeforeUnmount } from 'vue'
-import { ElMessage } from 'element-plus'
 import { ChatDotRound } from '@element-plus/icons-vue'
 import PanelTitle from '@/components/PanelTitle.vue'
 import BaseChart from '@/components/BaseChart.vue'
