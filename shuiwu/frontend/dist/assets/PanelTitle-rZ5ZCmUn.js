@@ -1,0 +1,2 @@
+import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{o,c as a,a as n,q as r}from"./vue-vendor-BBWLpg7Y.js";const c={},l={class:"panel-title"};function d(s,e){return o(),a("div",l,[e[0]||(e[0]=n("span",{class:"pt-deco"},null,-1)),r(s.$slots,"default",{},void 0,!0)])}const p=t(c,[["render",d],["__scopeId","data-v-59750973"]]);export{p as P};
+//# sourceMappingURL=PanelTitle-rZ5ZCmUn.js.map

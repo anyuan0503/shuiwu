@@ -51,17 +51,19 @@
           <el-table-column prop="area" label="片区" width="110" show-overflow-tooltip />
           <el-table-column prop="model" label="型号" width="120" show-overflow-tooltip />
           <el-table-column prop="location" label="位置" min-width="140" show-overflow-tooltip />
-          <el-table-column label="状态" width="90">
+          <el-table-column label="状态" width="96">
             <template #default="{ row }">
-              <el-tag :type="statusType(row.status)" effect="dark" size="small">
-                {{ statusName(row.status) }}
-              </el-tag>
+              <span class="status-tag" :class="statusTagCls(row.status)">{{ statusName(row.status) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="140" fixed="right">
+          <el-table-column label="操作" width="130" fixed="right">
             <template #default="{ row }">
-              <el-button link type="primary" size="small" @click="openEdit(row)">编辑</el-button>
-              <el-button link type="danger" size="small" @click="onDelete(row)">删除</el-button>
+              <el-button link type="primary" size="small" class="op-btn" @click="openEdit(row)">
+                <el-icon><Edit /></el-icon>编辑
+              </el-button>
+              <el-button link type="danger" size="small" class="op-btn del" @click="onDelete(row)">
+                <el-icon><Delete /></el-icon>删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -117,7 +119,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { Plus, Search, Refresh } from '@element-plus/icons-vue'
+import { Plus, Search, Refresh, Edit, Delete } from '@element-plus/icons-vue'
 import ChartCard from '@/components/ChartCard.vue'
 import BaseChart from '@/components/BaseChart.vue'
 import { pageDevices, deleteDevice, addDevice, updateDevice, onlineCount } from '@/api/device'
@@ -134,7 +136,7 @@ const editForm = ref({})
 const typeName = (t) => ({ pressure: '压力', flow: '流量', quality: '水质', level: '液位' }[t] || t)
 const typeBg = (t) => ({ pressure: '#00e5ff', flow: '#00ffa3', quality: '#ffd75e', level: '#8b7bff' }[t] || '#00e5ff')
 const statusName = (s) => ({ 1: '在线', 0: '离线', 2: '故障', 3: '停用' }[s] || '未知')
-const statusType = (s) => ({ 1: 'success', 0: 'info', 2: 'danger', 3: 'warning' }[s] || 'info')
+const statusTagCls = (s) => ({ 1: 'ok', 0: 'off', 2: 'fault', 3: 'stop' }[s] || 'off')
 
 const stackOption = ref({})
 
@@ -171,14 +173,14 @@ function renderStack(list) {
   })
   stackOption.value = {
     tooltip: { trigger: 'axis', ...darkTooltip() },
-    legend: { bottom: 0 },
-    grid: { left: 40, right: 20, top: 10, bottom: 40 },
+    legend: { bottom: 0, icon: 'roundRect', itemWidth: 12, itemHeight: 6, itemGap: 14, textStyle: { color: '#8fa8cf', fontSize: 12 } },
+    grid: { left: 40, right: 20, top: 10, bottom: 44 },
     xAxis: { type: 'category', ...axisCommon(), data: data.map((d) => d.name) },
     yAxis: { type: 'value', ...axisCommon() },
     series: [
-      { name: '在线', type: 'bar', stack: 'a', data: data.map((d) => d.online), itemStyle: { color: '#00ffa3' } },
-      { name: '离线', type: 'bar', stack: 'a', data: data.map((d) => d.offline), itemStyle: { color: '#5a6f96' } },
-      { name: '故障', type: 'bar', stack: 'a', data: data.map((d) => d.fault), itemStyle: { color: '#ff4d6d' } }
+      { name: '在线', type: 'bar', stack: 'a', barWidth: 22, data: data.map((d) => d.online), itemStyle: { color: '#26e890', borderRadius: [0, 0, 0, 0] } },
+      { name: '离线', type: 'bar', stack: 'a', barWidth: 22, data: data.map((d) => d.offline), itemStyle: { color: '#667488' } },
+      { name: '故障', type: 'bar', stack: 'a', barWidth: 22, data: data.map((d) => d.fault), itemStyle: { color: '#ff4455', borderRadius: [3, 3, 0, 0] } }
     ]
   }
 }
@@ -261,6 +263,15 @@ onMounted(() => {
 .filter-form :deep(.el-form-item) {
   margin-bottom: 14px;
 }
+.filter-form :deep(.el-form-item__label) {
+  font-size: 12px;
+  color: var(--text-sub);
+  padding-bottom: 4px;
+  line-height: 1.4;
+}
+.filter-form :deep(.el-form-item__content) {
+  width: 100%;
+}
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -270,6 +281,24 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   margin-top: 12px;
+}
+/* 操作按钮：图标 + 小字 */
+.op-btn {
+  gap: 3px;
+  font-size: 12px;
+}
+.op-btn.del {
+  opacity: 0.75;
+}
+.op-btn.del:hover {
+  opacity: 1;
+}
+/* 表格奇偶行微弱色差 */
+.ledger :deep(.el-table .el-table__row--striped td.el-table__cell) {
+  background: rgba(255, 255, 255, 0.05);
+}
+.ledger :deep(.el-table .el-table__row--striped:hover > td.el-table__cell) {
+  background: var(--bg-hover);
 }
 @media (max-width: 1200px) {
   .span-4, .span-2 { grid-column: 1 / -1; }

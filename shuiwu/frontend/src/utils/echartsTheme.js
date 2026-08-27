@@ -1,10 +1,13 @@
 // ECharts 统一科技暗色主题工具
 // 注意：echarts 实例与主题注册统一在 ./echarts.js 中按需配置，此处仅导出常量与通用配置
-const PRIMARY = '#00e5ff'
-const GREEN = '#00ffa3'
-const GOLD = '#ffd75e'
+const PRIMARY = '#00e5ee'
+const GREEN = '#28e28c'
+const GOLD = '#ffc136'
 const PURPLE = '#8b7bff'
-const DANGER = '#ff4d6d'
+const DANGER = '#ff4455'
+const INFO = '#00c8f0'
+const HEALTHY = '#26e890'
+const OFFLINE = '#667488'
 const SUB = '#8fa8cf'
 const AXIS = '#2a3a66'
 
@@ -32,4 +35,4 @@ export function registerTheme() {
   // 主题已在 ./echarts.js 中统一注册，保留空实现兼容旧调用
 }
 
-export { PRIMARY, GREEN, GOLD, PURPLE, DANGER, SUB }
+export { PRIMARY, GREEN, GOLD, PURPLE, DANGER, SUB, INFO, HEALTHY, OFFLINE }
