@@ -1,0 +1,2 @@
+import{s}from"./index-3FwxBcsk.js";function u(e){return s.get("/system/user/page",{params:e})}function n(e){return s.post("/system/user",e)}function a(e){return s.put("/system/user",e)}function o(e,t){return s.put(`/system/user/${e}/status`,{status:t})}function m(e){return s.delete(`/system/user/${e}`)}function i(){return s.get("/system/role/list")}function p(){return s.get("/system/menu/tree")}function c(){return s.get("/system/stat")}export{a,n as b,m as d,i as l,p as m,u as p,c as s,o as u};
+//# sourceMappingURL=system-B5-Co6Gz.js.map

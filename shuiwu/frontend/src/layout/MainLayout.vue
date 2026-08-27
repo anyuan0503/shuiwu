@@ -89,6 +89,12 @@
           </transition>
         </router-view>
       </el-main>
+
+      <el-footer class="footer" height="34px">
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+          蜀ICP备2026050045号
+        </a>
+      </el-footer>
     </el-container>
 
     <!-- 修改密码对话框 -->
@@ -117,7 +123,7 @@ import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { updatePassword } from '@/api/auth'
-import { resolveMenuPath } from '@/utils/path'
+import { resolveMenuPath, buildMenuTree } from '@/utils/path'
 import TimeBox from '@/components/TimeBox.vue'
 
 const route = useRoute()
@@ -128,20 +134,8 @@ const collapsed = ref(false)
 const pwdVisible = ref(false)
 const pwdForm = ref({ oldPassword: '', newPassword: '', confirm: '' })
 
-// 组装侧边菜单树（后端 menus 可能已是树）
-const menuTree = computed(() => {
-  const raw = userStore.menus || []
-  // 纯平铺时按 path 分组
-  return groupMenu(raw)
-})
-
-function groupMenu(list) {
-  // 后端返回顶层目录与叶子，这里简单处理：有 children 的保留
-  return list.map((m) => ({
-    ...m,
-    children: m.children && m.children.length ? m.children : null
-  }))
-}
+// 组装侧边菜单树：后端返回扁平列表，按 path 前缀构建目录 -> 子菜单
+const menuTree = computed(() => buildMenuTree(userStore.menus || []))
 
 function iconOf(name) {
   const map = {
@@ -327,5 +321,23 @@ async function submitPwd() {
   padding: 0;
   overflow: auto;
   background: transparent;
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: rgba(8, 12, 34, 0.9);
+  border-top: 1px solid var(--border-color);
+}
+.footer a {
+  color: var(--text-dim);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer a:hover {
+  color: var(--primary);
 }
 </style>

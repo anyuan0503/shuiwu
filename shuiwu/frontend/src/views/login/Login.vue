@@ -57,6 +57,15 @@
         </div>
       </div>
     </div>
+
+    <a
+      class="login-footer"
+      href="https://beian.miit.gov.cn/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      蜀ICP备2026050045号
+    </a>
   </div>
 </template>
 
@@ -285,5 +294,21 @@ onBeforeUnmount(() => cancelAnimationFrame(raf))
   gap: 8px;
   color: var(--text-dim);
   font-size: 12px;
+}
+.login-footer {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  text-align: center;
+  color: rgba(143, 168, 207, 0.55);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.login-footer:hover {
+  color: var(--primary);
 }
 </style>
