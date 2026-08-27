@@ -151,6 +151,15 @@
         </div>
       </div>
     </div>
+
+    <a
+      class="bs-footer"
+      href="https://beian.miit.gov.cn/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      蜀ICP备2026050045号
+    </a>
   </div>
 </template>
 
@@ -461,6 +470,20 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.bs-footer {
+  position: absolute;
+  right: 22px;
+  bottom: 10px;
+  z-index: 5;
+  color: rgba(143, 168, 207, 0.5);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.bs-footer:hover {
+  color: var(--primary);
 }
 .bg-particle {
   position: absolute;

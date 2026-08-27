@@ -89,6 +89,12 @@
           </transition>
         </router-view>
       </el-main>
+
+      <el-footer class="footer" height="34px">
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+          蜀ICP备2026050045号
+        </a>
+      </el-footer>
     </el-container>
 
     <!-- 修改密码对话框 -->
@@ -315,5 +321,23 @@ async function submitPwd() {
   padding: 0;
   overflow: auto;
   background: transparent;
+}
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: rgba(8, 12, 34, 0.9);
+  border-top: 1px solid var(--border-color);
+}
+.footer a {
+  color: var(--text-dim);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer a:hover {
+  color: var(--primary);
 }
 </style>
