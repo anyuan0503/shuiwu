@@ -43,10 +43,17 @@
             <el-option label="已忽略" :value="3" />
           </el-select>
           <el-button type="primary" :icon="Search" @click="reload">查询</el-button>
-          <el-button type="success" :icon="Setting" @click="ruleVisible = true">告警规则</el-button>
+          <el-button class="btn-ghost" :icon="Setting" @click="ruleVisible = true">告警规则</el-button>
         </div>
       </div>
       <el-table :data="rows" v-loading="loading" stripe height="460">
+        <template #empty>
+          <div class="table-empty">
+            <div class="te-icon">🔔</div>
+            <p>暂无告警记录</p>
+            <span>当前系统运行平稳，未发现匹配的告警</span>
+          </div>
+        </template>
         <el-table-column prop="id" label="ID" width="70" />
         <el-table-column prop="deviceName" label="设备" width="160" show-overflow-tooltip />
         <el-table-column label="级别" width="90">
@@ -110,7 +117,7 @@ import DatavNumber from '@/components/DatavNumber.vue'
 import PanelTitle from '@/components/PanelTitle.vue'
 import RuleDialog from '@/views/alarm/RuleDialog.vue'
 import { pageAlarms, handleAlarm, ignoreAlarm, alarmSummary, alarmTrend } from '@/api/alarm'
-import { axisCommon, darkTooltip, PRIMARY, GOLD, DANGER } from '@/utils/echartsTheme'
+import { axisCommon, darkTooltip, PRIMARY, GOLD, DANGER, HEALTHY, INFO } from '@/utils/echartsTheme'
 
 const loading = ref(false)
 const rows = ref([])
@@ -119,10 +126,10 @@ const query = reactive({ page: 1, size: 10, alarmLevel: '', alarmStatus: '' })
 
 const summary = ref({ total: 0, level1: 0, level2: 0, level3: 0, unhandled: 0 })
 const summaryList = computed(() => [
-  { label: '告警总数', value: summary.value.total, color: PRIMARY },
-  { label: '严重告警', value: summary.value.level3, color: DANGER },
-  { label: '待处理', value: summary.value.unhandled, color: GOLD },
-  { label: '今日告警', value: summary.value.today, color: '#00ffa3' }
+  { label: 'L3 严重', value: summary.value.level3, color: summary.value.level3 > 0 ? DANGER : HEALTHY },
+  { label: 'L2 告警', value: summary.value.level2, color: summary.value.level2 > 0 ? GOLD : HEALTHY },
+  { label: 'L1 提示', value: summary.value.level1, color: summary.value.level1 > 0 ? INFO : HEALTHY },
+  { label: '待处理', value: summary.value.unhandled, color: summary.value.unhandled > 0 ? GOLD : HEALTHY }
 ])
 const levelRows = computed(() => {
   const t = (summary.value.level1 || 0) + (summary.value.level2 || 0) + (summary.value.level3 || 0) || 1
@@ -237,11 +244,54 @@ onMounted(() => {
   align-items: baseline;
   justify-content: space-between;
   padding: 16px 20px;
-  border-radius: var(--radius);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 229, 238, 0.18);
+  box-shadow: 0 0 14px rgba(0, 229, 238, 0.08);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.sum-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(0, 229, 238, 0.15);
 }
 .si-label {
   color: var(--text-sub);
   font-size: 13px;
+}
+/* 次要按钮：弱化 */
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-sub);
+}
+.btn-ghost:hover {
+  color: var(--primary);
+  border-color: rgba(0, 229, 238, 0.4);
+  box-shadow: 0 0 10px rgba(0, 229, 238, 0.15);
+}
+/* 空数据美化 */
+.table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 40px 0;
+  color: var(--text-sub);
+}
+.te-icon {
+  font-size: 34px;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+.table-empty p {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+.table-empty span {
+  font-size: 12px;
+  color: var(--text-dim);
 }
 .alarm-body {
   display: flex;

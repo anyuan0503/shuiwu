@@ -8,7 +8,7 @@
         </div>
         <div>
           <div class="sc-label">{{ s.label }}</div>
-          <DatavNumber :value="realStats[s.key] ?? s.value" :color="s.color" :size="26" />
+          <DatavNumber :value="realStats[s.key] ?? s.value" :color="s.color" :size="30" />
         </div>
         <div class="sc-unit">{{ s.unit }}</div>
         <div class="sc-line" :style="{ background: s.color }"></div>
@@ -60,12 +60,12 @@ import { sysStat } from '@/api/system'
 import { onlineCount } from '@/api/device'
 import { alarmSummary, alarmTrend } from '@/api/alarm'
 import { realtime } from '@/api/monitor'
-import { axisCommon, darkTooltip, PRIMARY, GREEN, GOLD, DANGER } from '@/utils/echartsTheme'
+import { axisCommon, darkTooltip, PRIMARY, GREEN, GOLD, DANGER, HEALTHY } from '@/utils/echartsTheme'
 
-const statCards = ref([
+const statCards = computed(() => [
   { key: 'userCount', label: '系统用户', icon: 'User', color: PRIMARY, unit: '个' },
   { key: 'deviceCount', label: '监测设备', icon: 'Monitor', color: GREEN, unit: '台' },
-  { key: 'alarmUnhandled', label: '待处理告警', icon: 'Bell', color: GOLD, unit: '条' },
+  { key: 'alarmUnhandled', label: '待处理告警', icon: 'Bell', color: realStats.alarmUnhandled > 0 ? DANGER : HEALTHY, unit: '条' },
   { key: 'onlineRatio', label: '设备在线率', icon: 'Cellphone', color: '#8b7bff', unit: '%', ratio: true }
 ])
 const realStats = reactive({ userCount: 0, deviceCount: 0, alarmUnhandled: 0, onlineRatio: 0 })
@@ -115,9 +115,14 @@ async function loadStats() {
 }
 
 function renderPie(list) {
+  const total = list.reduce((s, i) => s + (i.total || 0), 0)
   pieOption.value = {
     tooltip: { trigger: 'item', ...darkTooltip() },
-    legend: { bottom: 0, icon: 'circle' },
+    legend: { bottom: 0, icon: 'circle', itemGap: 14, textStyle: { color: SUB, fontSize: 12 } },
+    graphic: [
+      { type: 'text', left: 'center', top: '36%', style: { text: `${total}`, fill: '#eaf6ff', fontSize: 28, fontWeight: 800, textAlign: 'center' } },
+      { type: 'text', left: 'center', top: '48%', style: { text: '监测设备 · 台', fill: SUB, fontSize: 12, textAlign: 'center' } }
+    ],
     series: [
       {
         type: 'pie',
@@ -130,7 +135,7 @@ function renderPie(list) {
           shadowBlur: 8,
           shadowColor: 'rgba(0,0,0,0.3)'
         },
-        label: { color: SUB },
+        label: { color: SUB, fontSize: 12 },
         data: list.map((i) => ({
           name: typeName(i.deviceType),
           value: i.total || 0,
@@ -142,16 +147,21 @@ function renderPie(list) {
 }
 
 function renderAlarmPie(d) {
+  const total = (d.level1 || 0) + (d.level2 || 0) + (d.level3 || 0)
   alarmPieOption.value = {
     tooltip: { trigger: 'item', ...darkTooltip() },
-    legend: { bottom: 0, icon: 'circle' },
+    legend: { bottom: 0, icon: 'circle', itemGap: 14, textStyle: { color: SUB, fontSize: 12 } },
+    graphic: [
+      { type: 'text', left: 'center', top: '36%', style: { text: `${total}`, fill: '#eaf6ff', fontSize: 28, fontWeight: 800, textAlign: 'center' } },
+      { type: 'text', left: 'center', top: '48%', style: { text: '告警总计 · 条', fill: SUB, fontSize: 12, textAlign: 'center' } }
+    ],
     series: [
       {
         type: 'pie',
         radius: ['45%', '70%'],
         center: ['50%', '44%'],
         itemStyle: { borderColor: 'rgba(10,14,39,0.9)', borderWidth: 2 },
-        label: { color: SUB },
+        label: { color: SUB, fontSize: 12 },
         data: [
           { name: '提示', value: d.level1 || 0, itemStyle: { color: PRIMARY } },
           { name: '警告', value: d.level2 || 0, itemStyle: { color: GOLD } },
@@ -199,7 +209,7 @@ function renderRealtime(list) {
   pressureOption.value = {
     tooltip: { trigger: 'axis', ...darkTooltip() },
     grid: { left: 40, right: 20, top: 30, bottom: 30 },
-    xAxis: { type: 'category', ...axisCommon(), data: items.map((i) => i.deviceName) },
+    xAxis: { type: 'category', ...axisCommon(), data: items.map((i) => i.deviceName), axisLabel: { color: SUB, fontSize: 11, rotate: 32, interval: 0 }, axisTick: { show: false } },
     yAxis: { type: 'value', ...axisCommon(), name: 'MPa' },
     series: [
       {
@@ -229,11 +239,15 @@ function renderRealtime(list) {
           .map((i) => ({
             value: i.flow,
             itemStyle: {
-              borderRadius: [0, 4, 4, 0],
+              borderRadius: [0, 6, 6, 0],
               color: new grad(GREEN, 'horizontal')
             }
           }))
           .reverse(),
+        emphasis: {
+          focus: 'series',
+          itemStyle: { shadowBlur: 14, shadowColor: 'rgba(40,226,140,0.45)', opacity: 1 }
+        },
         label: { show: true, position: 'right', color: SUB }
       }
     ]
@@ -277,7 +291,16 @@ onMounted(loadStats)
   align-items: center;
   gap: 14px;
   padding: 18px 20px;
-  border-radius: var(--radius);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 229, 238, 0.18);
+  box-shadow:
+    0 0 18px rgba(0, 229, 238, 0.1),
+    inset 0 0 20px rgba(0, 229, 238, 0.03);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 229, 238, 0.18);
 }
 .sc-icon {
   width: 48px;
@@ -290,13 +313,14 @@ onMounted(loadStats)
 }
 .sc-label {
   color: var(--text-sub);
-  font-size: 13px;
+  font-size: 12px;
   margin-bottom: 6px;
 }
 .sc-unit {
   margin-left: auto;
   align-self: flex-end;
   color: var(--text-dim);
+  font-size: 11px;
 }
 .sc-line {
   position: absolute;

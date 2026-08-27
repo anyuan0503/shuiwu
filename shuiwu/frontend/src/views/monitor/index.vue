@@ -8,14 +8,17 @@
       <span class="conn-time num" v-if="lastUpdate">{{ lastUpdate }}</span>
       <div class="conn-right">
         <span class="field-label">监测指标：</span>
-        <el-radio-group v-model="currentType" size="small">
-          <el-radio-button value="pressure">压力</el-radio-button>
-          <el-radio-button value="flow">流量</el-radio-button>
-          <el-radio-button value="ph">pH</el-radio-button>
-          <el-radio-button value="turbidity">浊度</el-radio-button>
-          <el-radio-button value="residualCl">余氯</el-radio-button>
-          <el-radio-button value="level">液位</el-radio-button>
-        </el-radio-group>
+        <div class="metric-tabs">
+          <span
+            v-for="t in metricTabs"
+            :key="t.value"
+            class="mtab"
+            :class="{ on: currentType === t.value }"
+            @click="currentType = t.value; onTypeChange()"
+          >
+            {{ t.label }}
+          </span>
+        </div>
       </div>
     </div>
 
@@ -93,6 +96,15 @@ const deviceCards = ref([])
 let samples = reactive({}) // deviceId -> { times:[], values:{} }
 let ws = null
 
+const metricTabs = [
+  { value: 'pressure', label: '压力' },
+  { value: 'flow', label: '流量' },
+  { value: 'ph', label: 'pH' },
+  { value: 'turbidity', label: '浊度' },
+  { value: 'residualCl', label: '余氯' },
+  { value: 'level', label: '液位' }
+]
+
 const typeName = (t) => ({ pressure: '压力计', flow: '流量计', quality: '水质仪', level: '液位计' }[t] || t)
 const typeLabel = (t) => ({ pressure: '压力', flow: '流量', ph: 'pH', turbidity: '浊度', residualCl: '余氯', level: '液位' }[t] || t)
 const unitOf = (deviceType, metric) => {
@@ -141,8 +153,14 @@ const trendOption = computed(() => {
       return d ? `${d.axisValue}<br/>${c.name}：<b style="color:${c.color}">${d.data[1]}</b> ${c.unit}` : ''
     }) },
     grid: { left: 50, right: 20, top: 30, bottom: 30 },
-    xAxis: { type: 'category', ...axisCommon(), data: data.map((d) => d[0]), boundaryGap: false },
-    yAxis: { type: 'value', ...axisCommon(), name: c.unit },
+    xAxis: {
+      type: 'category', ...axisCommon(), data: data.map((d) => d[0]), boundaryGap: false,
+      axisLabel: { color: SUB, fontSize: 11, interval: Math.max(1, Math.ceil((data.length || 0) / 8)), hideOverlap: true }
+    },
+    yAxis: {
+      type: 'value', ...axisCommon(), name: c.unit,
+      splitLine: { lineStyle: { color: 'rgba(42,58,102,0.18)', type: 'dashed' } }
+    },
     series: [
       {
         name: c.name,
@@ -295,6 +313,33 @@ onBeforeUnmount(() => {
   color: var(--text-sub);
   font-size: 13px;
 }
+/* 指标切换标签：选中高亮发光，未选中弱化 */
+.metric-tabs {
+  display: inline-flex;
+  gap: 6px;
+}
+.mtab {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  transition: all 0.25s;
+  user-select: none;
+}
+.mtab:hover {
+  color: var(--text-main);
+  background: var(--bg-hover);
+}
+.mtab.on {
+  color: var(--primary);
+  font-weight: 600;
+  background: rgba(0, 229, 238, 0.12);
+  border-color: rgba(0, 229, 238, 0.45);
+  box-shadow: 0 0 12px rgba(0, 229, 238, 0.25);
+}
 @keyframes blink {
   50% { opacity: 0.3; }
 }
@@ -357,8 +402,8 @@ onBeforeUnmount(() => {
 }
 .dev-val {
   text-align: right;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 20px;
   white-space: nowrap;
 }
 .dev-val small {
@@ -380,8 +425,14 @@ onBeforeUnmount(() => {
   align-items: baseline;
   gap: 8px;
   padding: 14px 18px;
-  border-radius: var(--radius);
+  border-radius: 12px;
   border: 1px solid var(--border-color);
+  box-shadow: 0 0 14px rgba(0, 229, 238, 0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(0, 229, 238, 0.14);
 }
 .ms-label {
   color: var(--text-sub);

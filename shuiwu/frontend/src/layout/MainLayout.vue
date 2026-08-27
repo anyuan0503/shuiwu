@@ -246,9 +246,33 @@ async function submitPwd() {
 .menu-scroll :deep(.el-menu) {
   border-right: none;
 }
+.menu-scroll :deep(.el-menu-item),
+.menu-scroll :deep(.el-sub-menu__title) {
+  transition: background 0.25s, color 0.25s;
+}
+.menu-scroll :deep(.el-menu-item:hover),
+.menu-scroll :deep(.el-sub-menu__title:hover) {
+  background: rgba(0, 229, 238, 0.08);
+}
+.menu-scroll :deep(.el-sub-menu .el-menu-item) {
+  border-left: 1px solid rgba(0, 229, 238, 0.12);
+}
+/* 选中菜单：左侧发光指示条 */
 .menu-scroll :deep(.el-menu-item.is-active) {
-  background: linear-gradient(90deg, rgba(0, 229, 255, 0.15), transparent);
-  border-right: 3px solid var(--primary);
+  position: relative;
+  background: linear-gradient(90deg, rgba(0, 229, 238, 0.16), transparent);
+  color: var(--primary);
+}
+.menu-scroll :deep(.el-menu-item.is-active)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary), 0 0 20px rgba(0, 229, 238, 0.5);
 }
 
 .main {
