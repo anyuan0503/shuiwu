@@ -9,17 +9,13 @@
         <el-table-column prop="roleName" label="角色名" width="160" />
         <el-table-column prop="roleCode" label="编码" width="160">
           <template #default="{ row }">
-            <el-tag effect="dark" style="border:none" color="#00e5ff">
-              {{ row.roleCode }}
-            </el-tag>
+            <span class="type-tag pressure">{{ row.roleCode }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="roleDesc" label="描述" min-width="240" show-overflow-tooltip />
         <el-table-column label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'info'" effect="plain" size="small">
-              {{ row.status === 1 ? '启用' : '停用' }}
-            </el-tag>
+            <span class="status-tag" :class="row.status === 1 ? 'ok' : 'off'">{{ row.status === 1 ? '启用' : '停用' }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />

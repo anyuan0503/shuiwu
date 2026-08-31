@@ -15,9 +15,7 @@
       <el-table-column prop="monitorField" label="监测项" width="110" />
       <el-table-column label="级别" width="80">
         <template #default="{ row }">
-          <el-tag :color="levelColor(row.alarmLevel)" effect="dark" style="color:#061020;border:none">
-            {{ levelName(row.alarmLevel) }}
-          </el-tag>
+          <span class="status-tag" :class="levelTagCls(row.alarmLevel)">{{ levelName(row.alarmLevel) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="阈值" width="130">
@@ -91,7 +89,7 @@ const editVisible = ref(false)
 const form = ref({})
 
 const levelName = (l) => ({ 1: '提示', 2: '警告', 3: '严重' }[l] || '未知')
-const levelColor = (l) => ({ 1: '#00e5ff', 2: '#ffd75e', 3: '#ff4d6d' }[l] || '#00e5ff')
+const levelTagCls = (l) => ({ 1: 'info', 2: 'warn', 3: 'fault' }[l] || 'info')
 
 async function load() {
   loading.value = true
