@@ -4,7 +4,7 @@
       <div class="toolbar">
         <el-input v-model="query.keyword" placeholder="账号/姓名" clearable style="width:220px" @keyup.enter="reload" />
         <el-button type="primary" :icon="Search" @click="reload">查询</el-button>
-        <el-button type="success" :icon="Plus" @click="openAdd">新增用户</el-button>
+        <el-button type="primary" :icon="Plus" @click="openAdd">新增用户</el-button>
       </div>
       <el-table :data="rows" v-loading="loading" stripe height="540">
         <el-table-column prop="id" label="ID" width="70" />
@@ -14,9 +14,9 @@
         <el-table-column prop="email" label="邮箱" min-width="180" show-overflow-tooltip />
         <el-table-column label="角色" width="140">
           <template #default="{ row }">
-            <el-tag v-for="r in row.roles" :key="r.id" size="small" effect="dark" style="border:none;margin-right:4px" color="#8b7bff">
+            <span v-for="r in row.roles" :key="r.id" class="type-tag level" style="margin-right:4px">
               {{ r.roleName }}
-            </el-tag>
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="状态" width="90">

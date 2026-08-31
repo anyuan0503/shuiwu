@@ -12,11 +12,9 @@
       </div>
       <el-table :data="rows" v-loading="loading" stripe height="560">
         <el-table-column prop="id" label="ID" width="70" />
-        <el-table-column prop="logType" label="类型" width="110">
+        <el-table-column prop="logType" label="类型" width="130">
           <template #default="{ row }">
-            <el-tag size="small" effect="dark" :color="typeColor(row.logType)" style="color:#061020;border:none">
-              {{ typeName(row.logType) }}
-            </el-tag>
+            <span class="status-tag" :class="logTagCls(row.logType)">{{ typeName(row.logType) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="question" label="问题/描述" min-width="220" show-overflow-tooltip />
@@ -55,7 +53,7 @@ const loading = ref(false)
 const query = reactive({ page: 1, size: 10, logType: '', keyword: '' })
 
 const typeName = (t) => ({ normal: 'Normal Query', clean: 'Data Clean', anomaly: 'Anomaly' }[t] || t || '—')
-const typeColor = (t) => ({ normal: '#00e5ff', clean: '#00ffa3', anomaly: '#ffd75e' }[t] || '#8b7bff')
+const logTagCls = (t) => ({ normal: 'ok', clean: 'info', anomaly: 'fault' }[t] || 'info')
 
 async function load() {
   loading.value = true

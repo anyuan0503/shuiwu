@@ -58,9 +58,7 @@
         <el-table-column prop="deviceName" label="设备" width="160" show-overflow-tooltip />
         <el-table-column label="级别" width="90">
           <template #default="{ row }">
-            <el-tag :color="levelColor(row.alarmLevel)" effect="dark" style="color:#061020;border:none">
-              {{ levelName(row.alarmLevel) }}
-            </el-tag>
+            <span class="status-tag" :class="levelTagCls(row.alarmLevel)">{{ levelName(row.alarmLevel) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="alarmDesc" label="告警描述" min-width="180" show-overflow-tooltip />
@@ -141,7 +139,7 @@ const levelRows = computed(() => {
 })
 
 const levelName = (l) => ({ 1: '提示', 2: '警告', 3: '严重' }[l] || '未知')
-const levelColor = (l) => ({ 1: '#00e5ff', 2: '#ffd75e', 3: '#ff4d6d' }[l] || '#00e5ff')
+const levelTagCls = (l) => ({ 1: 'info', 2: 'warn', 3: 'fault' }[l] || 'info')
 const statusName = (s) => ({ 0: '未处理', 1: '处理中', 2: '已处理', 3: '已忽略' }[s] || '未知')
 const statusType = (s) => ({ 0: 'danger', 1: 'warning', 2: 'success', 3: 'info' }[s] || 'info')
 

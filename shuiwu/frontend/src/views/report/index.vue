@@ -46,9 +46,7 @@
         <el-table-column prop="id" label="ID" width="70" />
         <el-table-column label="类型" width="100">
           <template #default="{ row }">
-            <el-tag size="small" effect="dark" style="border:none" :color="typeColor(row.reportType)">
-              {{ typeName(row.reportType) }}
-            </el-tag>
+            <span class="type-tag" :class="reportTagCls(row.reportType)">{{ typeName(row.reportType) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="reportName" label="报表名称" min-width="200" show-overflow-tooltip />
@@ -99,7 +97,7 @@ const genForm = ref({ reportType: 'daily', range: [] })
 const summary = ref({})
 
 const typeName = (t) => ({ daily: '日报', weekly: '周报', monthly: '月报' }[t] || t)
-const typeColor = (t) => ({ daily: '#00e5ff', weekly: '#00ffa3', monthly: '#ffd75e' }[t] || '#8b7bff')
+const reportTagCls = (t) => ({ daily: 'pressure', weekly: 'flow', monthly: 'quality' }[t] || 'pressure')
 
 async function load() {
   loading.value = true

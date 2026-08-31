@@ -158,6 +158,10 @@ a {
   --el-pagination-text-color: var(--text-sub);
   --el-pagination-hover-color: var(--primary);
 }
+.el-pagination.is-background .el-pager li.is-active {
+  background-color: var(--primary);
+  color: #02131f;
+}
 
 .el-tag {
   font-weight: 600;
@@ -252,6 +256,11 @@ a {
   background: rgba(255, 184, 32, 0.14);
   border: 1px solid rgba(255, 184, 32, 0.35);
 }
+.status-tag.info {
+  color: var(--info);
+  background: rgba(0, 200, 240, 0.13);
+  border: 1px solid rgba(0, 200, 240, 0.35);
+}
 .status-tag.stop {
   color: var(--offline);
   background: rgba(102, 116, 136, 0.14);
@@ -262,7 +271,7 @@ a {
    表格：深色模式下隔行微弱色差，提升长表格阅读舒适度
    ============================================================ */
 .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.03) !important;
 }
 .el-table .el-table__empty-text {
   color: var(--text-dim);
@@ -291,4 +300,183 @@ a {
 }
 .anim-in {
   animation: chartIn 0.5s ease both;
+}
+
+/* ============================================================
+   Element Plus 组件色板统一
+   覆盖默认高饱和色（success 绿 / danger 红 / 默认蓝等），
+   避免在深色主题下刺眼，统一为系统色值
+   ============================================================ */
+
+/* ---- el-tag 各类型：统一为柔和胶囊 ---- */
+.el-tag.el-tag--primary {
+  --el-tag-bg-color: rgba(0, 229, 238, 0.12);
+  --el-tag-border-color: rgba(0, 229, 238, 0.4);
+  --el-tag-text-color: var(--primary);
+}
+.el-tag.el-tag--success {
+  --el-tag-bg-color: rgba(38, 232, 144, 0.14);
+  --el-tag-border-color: rgba(38, 232, 144, 0.4);
+  --el-tag-text-color: var(--healthy);
+}
+.el-tag.el-tag--warning {
+  --el-tag-bg-color: rgba(255, 193, 54, 0.14);
+  --el-tag-border-color: rgba(255, 193, 54, 0.4);
+  --el-tag-text-color: var(--gold);
+}
+.el-tag.el-tag--danger,
+.el-tag.el-tag--error {
+  --el-tag-bg-color: rgba(255, 68, 85, 0.14);
+  --el-tag-border-color: rgba(255, 68, 85, 0.4);
+  --el-tag-text-color: var(--danger);
+}
+.el-tag.el-tag--info {
+  --el-tag-bg-color: rgba(102, 116, 136, 0.16);
+  --el-tag-border-color: rgba(102, 116, 136, 0.35);
+  --el-tag-text-color: var(--offline);
+}
+/* dark 效果去实色底，统一柔和胶囊 */
+.el-tag--dark.el-tag--primary {
+  --el-tag-bg-color: rgba(0, 229, 238, 0.16);
+  --el-tag-border-color: rgba(0, 229, 238, 0.5);
+  --el-tag-text-color: var(--primary);
+}
+.el-tag--dark.el-tag--success {
+  --el-tag-bg-color: rgba(38, 232, 144, 0.16);
+  --el-tag-border-color: rgba(38, 232, 144, 0.5);
+  --el-tag-text-color: var(--healthy);
+}
+.el-tag--dark.el-tag--warning {
+  --el-tag-bg-color: rgba(255, 193, 54, 0.16);
+  --el-tag-border-color: rgba(255, 193, 54, 0.5);
+  --el-tag-text-color: var(--gold);
+}
+.el-tag--dark.el-tag--danger,
+.el-tag--dark.el-tag--error {
+  --el-tag-bg-color: rgba(255, 68, 85, 0.16);
+  --el-tag-border-color: rgba(255, 68, 85, 0.5);
+  --el-tag-text-color: var(--danger);
+}
+.el-tag--dark.el-tag--info {
+  --el-tag-bg-color: rgba(102, 116, 136, 0.18);
+  --el-tag-border-color: rgba(102, 116, 136, 0.45);
+  --el-tag-text-color: var(--offline);
+}
+/* plain 效果边框/文字色统一 */
+.el-tag--plain.el-tag--success {
+  --el-tag-border-color: rgba(38, 232, 144, 0.5);
+  --el-tag-text-color: var(--healthy);
+}
+.el-tag--plain.el-tag--warning {
+  --el-tag-border-color: rgba(255, 193, 54, 0.5);
+  --el-tag-text-color: var(--gold);
+}
+.el-tag--plain.el-tag--danger,
+.el-tag--plain.el-tag--error {
+  --el-tag-border-color: rgba(255, 68, 85, 0.5);
+  --el-tag-text-color: var(--danger);
+}
+.el-tag--plain.el-tag--info {
+  --el-tag-border-color: rgba(102, 116, 136, 0.45);
+  --el-tag-text-color: var(--offline);
+}
+
+/* ---- el-button 类型：统一为系统色 ---- */
+.el-button--success {
+  --el-button-bg-color: var(--green);
+  --el-button-border-color: var(--green);
+  --el-button-text-color: #02131f;
+  --el-button-hover-bg-color: #4ef5a8;
+  --el-button-hover-border-color: #4ef5a8;
+  --el-button-active-bg-color: #1fc67a;
+  --el-button-active-border-color: #1fc67a;
+}
+.el-button--danger {
+  --el-button-bg-color: var(--danger);
+  --el-button-border-color: var(--danger);
+  --el-button-text-color: #fff;
+  --el-button-hover-bg-color: #ff6b79;
+  --el-button-hover-border-color: #ff6b79;
+  --el-button-active-bg-color: #e63344;
+  --el-button-active-border-color: #e63344;
+}
+.el-button--warning {
+  --el-button-bg-color: var(--gold);
+  --el-button-border-color: var(--gold);
+  --el-button-text-color: #221500;
+  --el-button-hover-bg-color: #ffd266;
+  --el-button-hover-border-color: #ffd266;
+  --el-button-active-bg-color: #e5a822;
+  --el-button-active-border-color: #e5a822;
+}
+.el-button--info {
+  --el-button-bg-color: var(--offline);
+  --el-button-border-color: var(--offline);
+  --el-button-text-color: #fff;
+  --el-button-hover-bg-color: #8a99b5;
+  --el-button-hover-border-color: #8a99b5;
+  --el-button-active-bg-color: #5a6780;
+  --el-button-active-border-color: #5a6780;
+}
+/* link / plain / text 按钮文字色统一 */
+.el-button--primary.is-link,
+.el-button--primary.is-plain,
+.el-button--primary.is-text {
+  --el-button-text-color: var(--primary);
+  --el-button-hover-bg-color: rgba(0, 229, 238, 0.15);
+  --el-button-hover-border-color: var(--primary);
+}
+.el-button--success.is-link,
+.el-button--success.is-plain,
+.el-button--success.is-text {
+  --el-button-text-color: var(--healthy);
+}
+.el-button--danger.is-link,
+.el-button--danger.is-plain,
+.el-button--danger.is-text {
+  --el-button-text-color: var(--danger);
+}
+.el-button--warning.is-link,
+.el-button--warning.is-plain,
+.el-button--warning.is-text {
+  --el-button-text-color: var(--gold);
+}
+.el-button--info.is-link,
+.el-button--info.is-plain,
+.el-button--info.is-text {
+  --el-button-text-color: var(--offline);
+}
+
+/* ============================================================
+   设备类型标签（柔和胶囊，替代高饱和实色底）
+   ============================================================ */
+.type-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.type-tag.pressure {
+  color: var(--primary);
+  background: rgba(0, 229, 238, 0.12);
+  border: 1px solid rgba(0, 229, 238, 0.35);
+}
+.type-tag.flow {
+  color: var(--healthy);
+  background: rgba(38, 232, 144, 0.12);
+  border: 1px solid rgba(38, 232, 144, 0.35);
+}
+.type-tag.quality {
+  color: var(--gold);
+  background: rgba(255, 193, 54, 0.12);
+  border: 1px solid rgba(255, 193, 54, 0.35);
+}
+.type-tag.level {
+  color: var(--purple);
+  background: rgba(139, 123, 255, 0.12);
+  border: 1px solid rgba(139, 123, 255, 0.35);
 }

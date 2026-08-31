@@ -16,9 +16,7 @@
         <el-table-column prop="deviceName" label="名称" min-width="160" show-overflow-tooltip />
         <el-table-column label="类型" width="90">
           <template #default="{ row }">
-            <el-tag size="small" :color="typeBg(row.deviceType)" style="color:#061020;border:none">
-              {{ typeName(row.deviceType) }}
-            </el-tag>
+            <span class="type-tag" :class="typeTagCls(row.deviceType)">{{ typeName(row.deviceType) }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="manufacturer" label="厂商" width="140" show-overflow-tooltip />
@@ -26,11 +24,9 @@
         <el-table-column prop="installDate" label="安装日期" width="130" />
         <el-table-column prop="lon" label="经度" width="110" />
         <el-table-column prop="lat" label="纬度" width="110" />
-        <el-table-column label="状态" width="90">
+        <el-table-column label="状态" width="96">
           <template #default="{ row }">
-            <el-tag :type="statusType(row.status)" effect="dark" size="small">
-              {{ statusName(row.status) }}
-            </el-tag>
+            <span class="status-tag" :class="statusTagCls(row.status)">{{ statusName(row.status) }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -59,9 +55,10 @@ const loading = ref(false)
 const query = reactive({ page: 1, size: 10, keyword: '', deviceType: '' })
 
 const typeName = (t) => ({ pressure: '压力', flow: '流量', quality: '水质', level: '液位' }[t] || t)
-const typeBg = (t) => ({ pressure: '#00e5ff', flow: '#00ffa3', quality: '#ffd75e', level: '#8b7bff' }[t] || '#00e5ff')
+const typeBg = (t) => ({ pressure: '#00e5ee', flow: '#26e890', quality: '#ffc136', level: '#8b7bff' }[t] || '#00e5ee')
+const typeTagCls = (t) => ({ pressure: 'pressure', flow: 'flow', quality: 'quality', level: 'level' }[t] || 'pressure')
 const statusName = (s) => ({ 1: '在线', 0: '离线', 2: '故障', 3: '停用' }[s] || '未知')
-const statusType = (s) => ({ 1: 'success', 0: 'info', 2: 'danger', 3: 'warning' }[s] || 'info')
+const statusTagCls = (s) => ({ 1: 'ok', 0: 'off', 2: 'fault', 3: 'stop' }[s] || 'off')
 
 async function load() {
   loading.value = true
